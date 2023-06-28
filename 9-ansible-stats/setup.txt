@@ -1,0 +1,1 @@
+ansible -i hosts.ini  demo -m ansible.builtin.setup -a 'filter=all_ipv4_addresses,distribution,os_family,hostname,env'
