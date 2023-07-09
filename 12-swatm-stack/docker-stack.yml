@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  nginx:
+    image: localhost:5000/nginx:latest
+    restart: always
+    configs:
+      - my_nging_config
+    ports:
+      - 8080:80
+    deploy:
+      mode: global
+    networks:
+      - myNetwork
+
+  postgres:
+    image: postgres:16beta1-alpine3.17
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=postgres
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=pgpwd4habr
+    - PGDATA=./postgres/data
+    networks:
+      - myNetwork
+    deploy:
+      labels: 
+      - node.labels.postgres == true
+
+networks:
+  myNetwork:
+    driver: overlay
+
+configs:
+  my_nging_config:
+    file: ./nginx.conf
